@@ -115,7 +115,13 @@ const crushSetter = () => {
   nonce = results.length + 1;
   const combination = combine(serverSeed, clientSeed, nonce);
   crashPoint = (getCrashPoint(combination) / 100).toFixed(2);
-  const newResult = {
+ 
+  serverSeed = generateServerSeed();
+
+  if (crashPoint > 20) {
+    return crushSetter();
+  }else{
+     const newResult = {
     serverSeed,
     clientSeed,
     nonce,
@@ -123,13 +129,10 @@ const crushSetter = () => {
     round: round,
     time: moment().format("MMMM Do YYYY, h:mm:ss a"),
   };
-  serverSeed = generateServerSeed();
-
-  if (crashPoint > 20) {
-    return crushSetter();
+      return results.push(newResult);
   }
 
-  return results.push(newResult);
+  return crushSetter();
 };
 var something = (function () {
   var executed = false;
